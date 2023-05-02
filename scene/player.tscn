@@ -1,7 +1,7 @@
-[gd_scene load_steps=55 format=3 uid="uid://bjm1pax8jl8h3"]
+[gd_scene load_steps=56 format=3 uid="uid://jydhnmovo05n"]
 
-[ext_resource type="Script" path="res://scene/player.gd" id="1_4aqr6"]
 [ext_resource type="Texture2D" uid="uid://q2onn4nmoc6v" path="res://art/characters/player.png" id="1_6vovq"]
+[ext_resource type="Script" path="res://script/player.gd" id="1_m6gel"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0mb2r"]
 atlas = ExtResource("1_6vovq")
@@ -413,12 +413,21 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
-script = ExtResource("1_4aqr6")
+[sub_resource type="CircleShape2D" id="CircleShape2D_wtg2n"]
+radius = 5.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Player" type="CharacterBody2D"]
+position = Vector2(0, -7)
+collision_layer = 3
+script = ExtResource("1_m6gel")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1, -19)
 sprite_frames = SubResource("SpriteFrames_ra0wa")
 animation = &"death"
 frame_progress = 0.699668
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+y_sort_enabled = true
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_wtg2n")
