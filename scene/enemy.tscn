@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bl5qgvltnow10"]
+[gd_scene load_steps=22 format=3 uid="uid://bl5qgvltnow10"]
 
 [ext_resource type="Script" path="res://script/enemy.gd" id="1_dmclm"]
 [ext_resource type="Texture2D" uid="uid://0uqsj71xiay6" path="res://art/characters/slime.png" id="1_t3vjt"]
@@ -132,7 +132,10 @@ radius = 61.0983
 [sub_resource type="CircleShape2D" id="CircleShape2D_ucl4f"]
 radius = 5.0
 
-[node name="enemy" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_7wajt"]
+radius = 14.0
+
+[node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_dmclm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -151,5 +154,17 @@ shape = SubResource("CircleShape2D_ka4ys")
 position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_ucl4f")
 
+[node name="Enemy_hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy_hitbox"]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_7wajt")
+
+[node name="take_damage_cooldown" type="Timer" parent="."]
+wait_time = 0.5
+
 [connection signal="body_entered" from="Detection_player" to="." method="_on_detection_player_body_entered"]
 [connection signal="body_exited" from="Detection_player" to="." method="_on_detection_player_body_exited"]
+[connection signal="body_entered" from="Enemy_hitbox" to="." method="_on_enemy_hitbox_body_entered"]
+[connection signal="body_exited" from="Enemy_hitbox" to="." method="_on_enemy_hitbox_body_exited"]
+[connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
