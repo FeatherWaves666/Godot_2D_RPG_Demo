@@ -15,7 +15,8 @@ func _ready():
 	$AnimatedSprite2D.play("front_idle")
 
 func _physics_process(delta):
-	player_movement(delta)
+	if global.is_player_current_attack == false:
+		player_movement(delta)
 	enemy_attack()
 	attack()
 	
