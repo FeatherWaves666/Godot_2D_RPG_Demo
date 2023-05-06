@@ -13,12 +13,15 @@ var current_dir = "none"
 
 func _ready():
 	$AnimatedSprite2D.play("front_idle")
+	$Regin_health_timer.start()
 
 func _physics_process(delta):
 	if global.is_player_current_attack == false:
 		player_movement(delta)
 	enemy_attack()
 	attack()
+	switch_camera()
+	update_health()
 	
 	if health <= 0:
 		is_player_alive = false
@@ -103,7 +106,7 @@ func enemy_attack():
 	if is_enemy_inattack_range and is_enemy_attack_cooldown:
 		health -= 20
 		is_enemy_attack_cooldown = false
-		$attack_cooldown.start()
+		$Attack_cooldown.start()
 		print(health)
 
 func _on_attack_cooldown_timeout():
@@ -118,20 +121,46 @@ func attack():
 		if dir == "right":
 			$AnimatedSprite2D.flip_h = false
 			$AnimatedSprite2D.play("side_attack")
-			$deal_attack_timer.start()
+			$Deal_attack_timer.start()
 		elif dir == "left":
 			$AnimatedSprite2D.flip_h = true
 			$AnimatedSprite2D.play("side_attack")
-			$deal_attack_timer.start()
+			$Deal_attack_timer.start()
 		elif dir == "up":
 			$AnimatedSprite2D.play("back_attack")
-			$deal_attack_timer.start()
+			$Deal_attack_timer.start()
 		elif dir == "down":
 			$AnimatedSprite2D.play("front_attack")
-			$deal_attack_timer.start()
+			$Deal_attack_timer.start()
 
 
 func _on_deal_attack_timer_timeout():
-	$deal_attack_timer.stop()
+	$Deal_attack_timer.stop()
 	global.is_player_current_attack = false
 	is_attack_ip = false
+
+func switch_camera():
+	if global.current_scene == "world":
+		$World_camera.enabled = true
+		$Cliff_side_camera.enabled = false
+	elif global.current_scene == "cliff_side":
+		$World_camera.enabled = false
+		$Cliff_side_camera.enabled = true
+
+func update_health():
+	var health_bar = $Health_bar
+	health_bar.value = health
+	
+	if health < 100:
+		health_bar.visible = true
+	elif health >= 100:
+		health_bar.visible = false
+
+func _on_regin_health_timer_timeout():
+	print(1)
+	if health == 0:
+		health = 0
+	elif health < 100:
+		health += 20
+		if health > 100:
+			health = 100
